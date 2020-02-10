@@ -57,8 +57,31 @@ class Ball
   // updates ball coordinate based on velocity
   move()
   {
+    if(this.isCollidedHorizontally())
+      this.reverseHorizontalVelocity();
+    if(this.isCollidedVertically())
+      this.reverseVerticalVelocity();
+    this.moveX();
+    this.moveY();
+  }
+  moveX(){
     this.x += this.velocityX;
+  }
+  moveY()
+  {
     this.y += this.velocityY;
+  }
+  isCollidedHorizontally(){
+    return ((this.x + this.radius) >= this.canvas.width) || ((this.x - this.radius) <= 0);
+  }
+  isCollidedVertically(){
+    return ((this.y + this.radius) >= this.canvas.height) || ((this.y - this.radius) <= 0);
+  }
+  reverseHorizontalVelocity(){
+    this.velocityX = -1 * (this.velocityX);
+  }
+  reverseVerticalVelocity(){
+    this.velocityY = -1 * (this.velocityY);
   }
 }
 
