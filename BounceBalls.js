@@ -18,8 +18,8 @@ class BouncingBalls{
     //draw ball and update ball's location
     for(var i = 0; i < this.balls.length; i++)
     {
-      this.balls[i].draw();
-      this.balls[i].move();
+      this.balls[i].moveAndDraw();
+      //this.balls[i].move();
     }
     requestAnimationFrame(this.startAnimation.bind(this));
   }
@@ -54,7 +54,7 @@ class Ball
     this.color = this.getRandomColor();
   }
   getRandomVelocity(){
-    return this.getRandomInteger(1, 20);
+    return this.getRandomInteger(-20, 20);
   }
   getRandomRadius(){
     return this.getRandomInteger(5, 20);
@@ -77,21 +77,44 @@ class Ball
     context.fill();
   }
   // updates ball coordinate based on velocity
-  move()
+  moveAndDraw()
   {
     if(this.isCollidedHorizontally())
-      this.reverseHorizontalVelocity();
+      this.updateHorizontalVelocity();
     if(this.isCollidedVertically())
-      this.reverseVerticalVelocity();
+      this.updateVerticalVelocity();
+
+    //update velocityY due to gravity
+    this.velocityY += 0.2;
+    this.stopBallIfSlowedEnough();
+
+
     this.moveX();
     this.moveY();
+    this.draw();
+  }
+  stopBallIfSlowedEnough(){
+    if (this.velocityX < 0.01 && this.velocityX > -0.01) {
+      this.velocityX = 0
+    }
+    if (this.velocityY < 0.01 && this.velocityY > -0.01) {
+      this.velocityY = 0
+    }
   }
   moveX(){
     this.x += this.velocityX;
+    if((this.x + this.radius) > this.canvas.width)
+      this.x = this.canvas.width - this.radius;
+    if((this.x - this.radius) < 0)
+      this.x = this.radius;
   }
   moveY()
   {
     this.y += this.velocityY;
+    if((this.y + this.radius) > this.canvas.height)
+      this.y = this.canvas.height-this.radius;
+    if((this.y - this.radius) <= 0)
+      this.y = this.radius;
   }
   isCollidedHorizontally(){
     return ((this.x + this.radius) >= this.canvas.width) || ((this.x - this.radius) <= 0);
@@ -99,11 +122,13 @@ class Ball
   isCollidedVertically(){
     return ((this.y + this.radius) >= this.canvas.height) || ((this.y - this.radius) <= 0);
   }
-  reverseHorizontalVelocity(){
-    this.velocityX = -1 * (this.velocityX);
+  updateHorizontalVelocity(){
+    //slows due to collision and direction reverses
+    this.velocityX = -(0.8) * (this.velocityX);
   }
-  reverseVerticalVelocity(){
-    this.velocityY = -1 * (this.velocityY);
+  updateVerticalVelocity(){
+    //slows due to collision and reverses direction
+    this.velocityY = -(0.75) * (this.velocityY);
   }
 }
 
