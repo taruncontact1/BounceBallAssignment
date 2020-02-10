@@ -29,6 +29,7 @@ class BouncingBalls{
     var x = event.clientX;
     var y = event.clientY;
     var ball = new Ball(this.canvas, x, y,'black', 20, 5, 5);
+    ball.randomize();
     this.balls.push(ball);
   }
 }
@@ -44,6 +45,27 @@ class Ball
     this.radius = radius;
     this.x = x;
     this.y = y;
+  }
+  //ball with random parameters
+  randomize(){
+    this.velocityX = this.getRandomVelocity();
+    this.velocityY = this.getRandomVelocity();
+    this.radius = this.getRandomRadius();
+    this.color = this.getRandomColor();
+  }
+  getRandomVelocity(){
+    return this.getRandomInteger(1, 20);
+  }
+  getRandomRadius(){
+    return this.getRandomInteger(5, 20);
+  }
+  getRandomColor(){
+    var colors = ['gold', 'black','red','blue','green']
+    var colorIndex = this.getRandomInteger(0,4);
+    return colors[colorIndex];
+  }
+  getRandomInteger(min, max){
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
   //renders ball on screen
   draw()
