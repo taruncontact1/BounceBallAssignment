@@ -6,8 +6,13 @@ class BouncingBalls{
     this.balls = [];
     this.canvas = document.getElementById(canvasId);
     this.canvasContext = this.canvas.getContext('2d');
+    window.addEventListener('resize', this.resizeCanvas.bind(this), false);
     this.canvas.addEventListener("click", this.addBall.bind(this), false);
     this.startAnimation();
+  }
+  resizeCanvas(){
+    this.canvas.width = window.innerWidth -20;
+    this.canvas.height = window.innerHeight -20;
   }
   //clears the canvas and renders the balls at new updated location
   startAnimation()
