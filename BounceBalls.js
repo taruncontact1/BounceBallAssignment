@@ -84,20 +84,25 @@ class Ball
     if(this.isCollidedVertically())
       this.updateVerticalVelocity();
 
-    //update velocityY due to gravity
-    this.velocityY += 0.2;
-    this.stopBallIfSlowedEnough();
+    //update velocity due to friction and gravity
+    this.applyFrictionAndGravity();
 
+    this.stopBallIfSlowedEnough();
 
     this.moveX();
     this.moveY();
     this.draw();
   }
+  applyFrictionAndGravity(){
+    this.velocityY += 0.2;
+    if(this.velocityX > 0) this.velocityX -= 0.01;
+    else this.velocityX += 0.01;
+  }
   stopBallIfSlowedEnough(){
-    if (this.velocityX < 0.01 && this.velocityX > -0.01) {
+    if (this.velocityX < .03 && this.velocityX > -0.03) {
       this.velocityX = 0
     }
-    if (this.velocityY < 0.01 && this.velocityY > -0.01) {
+    if (this.velocityY < 0.03 && this.velocityY > -0.03) {
       this.velocityY = 0
     }
   }
